@@ -10,10 +10,9 @@ configuration-files = [
   "kubelet-server-crt",
   "kubelet-server-key",
   "credential-provider-config-yaml",
+  "system-slice-kube-conf",
 ]
-restart-commands = [
-  "/usr/bin/systemctl try-restart kubelet.service"
-]
+restart-commands = ["/usr/bin/systemctl try-restart kubelet.service"]
 
 [configuration-files.kubelet-env]
 path = "/etc/kubernetes/kubelet/env"
@@ -51,6 +50,30 @@ template-path = "/usr/share/templates/kubelet-server-key"
 path = "/etc/systemd/system/kubelet.service.d/exec-start.conf"
 template-path = "/usr/share/templates/kubelet-exec-start-conf"
 mode = "0600"
+
+[configuration-files.system-slice-kube-conf]
+path = "/etc/systemd/system/system.slice.d/system-slice-kube.conf"
+template-path = "/usr/share/templates/system-slice-kube.conf"
+mode = "0600"
+
+[configuration-files.runtime-slice-kube-conf]
+path = "/etc/systemd/system/runtime.slice.d/runtime-slice-kube.conf"
+template-path = "/usr/share/templates/runtime-slice-kube.conf"
+mode = "0600"
+
+[configuration-files.init-scope-kube-conf]
+path = "/etc/systemd/system/init.scope.d/init-scope-kube.conf"
+template-path = "/usr/share/templates/init-scope-kube.conf"
+mode = "0600"
+
+# This is not a great approach for a few reasons
+# 1. It should be in the host-ctr package, but that is not configurable at present
+# 2. The 'correct' way to do this is to make containerd use a custom systemd compatible cgroup path, with a pre-existing CPUset
+# but that seems to be ignored/broken in my testing?
+[configuration-files.host-containerd-cpus]
+path = "/sys/fs/cgroup/default/cpuset.cpus"
+template-path = "/usr/share/templates/host-containerd-cpusets.cpus"
+mode = "0644"
 
 [configuration-files.credential-provider-config-yaml]
 path = "/etc/kubernetes/kubelet/credential-provider-config.yaml"

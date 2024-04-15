@@ -48,6 +48,10 @@ Source12: kubelet-server-key
 Source13: etc-kubernetes-pki-private.mount
 Source14: credential-provider-config-yaml
 Source15: logdog.kubelet.conf
+Source16: system-slice-kube.conf
+Source17: runtime-slice-kube.conf
+Source18: init-scope-kube.conf
+Source19: host-containerd-cpusets.cpus
 
 # ExecStartPre drop-ins
 Source20: prestart-pull-pause-ctr.conf
@@ -107,6 +111,10 @@ install -p -m 0644 %{S:1} %{S:10} %{S:13} %{buildroot}%{_cross_unitdir}
 install -d %{buildroot}%{_cross_unitdir}/kubelet.service.d
 install -p -m 0644 %{S:20} %{S:21} %{S:22} %{buildroot}%{_cross_unitdir}/kubelet.service.d
 
+install -d %{buildroot}%{_cross_unitdir}/system.slice.d
+install -d %{buildroot}%{_cross_unitdir}/runtime.slice.d
+install -d %{buildroot}%{_cross_unitdir}/init.scope.d
+
 mkdir -p %{buildroot}%{_cross_templatedir}
 install -m 0644 %{S:2} %{buildroot}%{_cross_templatedir}/kubelet-env
 install -m 0644 %{S:3} %{buildroot}%{_cross_templatedir}/kubelet-config
@@ -117,6 +125,11 @@ install -m 0644 %{S:7} %{buildroot}%{_cross_templatedir}/kubelet-bootstrap-kubec
 install -m 0644 %{S:11} %{buildroot}%{_cross_templatedir}/kubelet-server-crt
 install -m 0644 %{S:12} %{buildroot}%{_cross_templatedir}/kubelet-server-key
 install -m 0644 %{S:14} %{buildroot}%{_cross_templatedir}/credential-provider-config-yaml
+install -m 0644 %{S:16} %{buildroot}%{_cross_templatedir}/system-slice-kube.conf
+install -m 0644 %{S:17} %{buildroot}%{_cross_templatedir}/runtime-slice-kube.conf
+install -m 0644 %{S:18} %{buildroot}%{_cross_templatedir}/init-scope-kube.conf
+install -m 0644 %{S:19} %{buildroot}%{_cross_templatedir}/host-containerd-cpusets.cpus
+
 
 install -d %{buildroot}%{_cross_tmpfilesdir}
 install -p -m 0644 %{S:8} %{buildroot}%{_cross_tmpfilesdir}/kubernetes.conf
@@ -146,6 +159,9 @@ install -p -m 0644 %{S:15} %{buildroot}%{_cross_datadir}/logdog.d
 %{_cross_unitdir}/kubelet.service.d/prestart-pull-pause-ctr.conf
 %{_cross_unitdir}/kubelet.service.d/make-kubelet-dirs.conf
 %{_cross_unitdir}/kubelet.service.d/dockershim-symlink.conf
+%dir %{_cross_unitdir}/system.slice.d
+%dir %{_cross_unitdir}/runtime.slice.d
+%dir %{_cross_unitdir}/init.scope.d
 %dir %{_cross_templatedir}
 %{_cross_templatedir}/kubelet-env
 %{_cross_templatedir}/kubelet-config
@@ -156,6 +172,10 @@ install -p -m 0644 %{S:15} %{buildroot}%{_cross_datadir}/logdog.d
 %{_cross_templatedir}/kubelet-server-crt
 %{_cross_templatedir}/kubelet-server-key
 %{_cross_templatedir}/credential-provider-config-yaml
+%{_cross_templatedir}/system-slice-kube.conf
+%{_cross_templatedir}/runtime-slice-kube.conf
+%{_cross_templatedir}/init-scope-kube.conf
+%{_cross_templatedir}/host-containerd-cpusets.cpus
 %{_cross_tmpfilesdir}/kubernetes.conf
 %{_cross_sysctldir}/90-kubelet.conf
 %dir %{_cross_libexecdir}/kubernetes

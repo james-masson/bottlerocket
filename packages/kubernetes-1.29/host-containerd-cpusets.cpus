@@ -1,0 +1,5 @@
+[required-extensions]
+aws = { version = "v1", optional = true }
+kubernetes = "v1"
++++
+{{settings.kubernetes.host-containerd-cpus}}
